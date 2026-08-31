@@ -1,0 +1,3590 @@
+<!DOCTYPE html>
+<!-- 
+    Declaração DOCTYPE: informa ao navegador que este é um documento HTML5.
+    Isso garante que o navegador renderize a página no modo padrão (standards mode).
+-->
+
+<!--
+    index.html - Calculadora de IMC com medidor analógico (velocímetro),
+    gráfico de barras do histórico, tabela de histórico detalhada,
+    tema claro/escuro, validação em tempo real.
+    Design moderno com gradientes, cards escuros e ícones.
+-->
+<!-- 
+    Comentário de múltiplas linhas HTML: descreve o propósito geral do arquivo.
+    Explica as principais funcionalidades: medidor analógico, gráfico de barras,
+    tabela de histórico, alternância de tema e validação em tempo real.
+-->
+
+<html lang="pt-BR">
+<!-- 
+    Tag <html>: elemento raiz de todo documento HTML.
+    Atributo lang="pt-BR": define o idioma do documento como Português do Brasil.
+    Isso ajuda mecanismos de busca e leitores de tela a interpretar o conteúdo corretamente.
+-->
+
+<head>
+    <!-- 
+        Tag <head>: contém metadados sobre o documento.
+        Metadados não são exibidos na página, mas são usados pelo navegador,
+        motores de busca e outros serviços web.
+    -->
+
+    <!-- Metadados essenciais -->
+    <!-- 
+        Comentário HTML: indica que os elementos a seguir são metadados essenciais.
+    -->
+
+    <meta charset="UTF-8">
+    <!-- 
+        Tag <meta>: define metadados.
+        Atributo charset="UTF-8": define a codificação de caracteres como UTF-8.
+        UTF-8 suporta praticamente todos os caracteres de todos os idiomas,
+        incluindo acentos, cedilhas e caracteres especiais.
+    -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+        Tag <meta> com name="viewport": controla como a página é exibida em dispositivos móveis.
+        content="width=device-width": a largura da viewport será igual à largura do dispositivo.
+        initial-scale=1.0: o zoom inicial será 100% (sem ampliação ou redução).
+        Essencial para design responsivo.
+    -->
+
+    <title>IMC Dashboard - Medidor Analógico</title>
+    <!-- 
+        Tag <title>: define o título da página.
+        Este texto aparece na aba do navegador e nos resultados de busca.
+        "IMC Dashboard - Medidor Analógico" descreve o propósito da aplicação.
+    -->
+
+    <!-- Google Fonts: carrega a fonte 'Inter' com vários pesos -->
+    <!-- 
+        Comentário explicando que a linha seguinte importa uma fonte do Google Fonts.
+    -->
+
+    <link
+        href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap)"
+        rel="stylesheet">
+    <!-- 
+        Tag <link>: vincula recursos externos ao documento.
+        href="[fonts.googleapis.com](https://fonts.googleapis.com/)": URL da fonte Inter no Google Fonts.
+        family=Inter: nome da fonte.
+        wght@400;600;700;800: carrega os pesos 400 (normal), 600 (semi-bold), 700 (bold) e 800 (extra-bold).
+        display=swap: exibe texto com fonte fallback enquanto a fonte carrega, depois troca.
+        rel="stylesheet": indica que o recurso é uma folha de estilos CSS.
+    -->
+
+    <!-- Font Awesome: biblioteca de ícones (versão gratuita) -->
+    <!-- 
+        Comentário explicando que a linha seguinte importa a biblioteca de ícones Font Awesome.
+    -->
+
+    <link rel="stylesheet"
+        href="[cdnjs.cloudflare.com](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css)">
+    <!-- 
+        Tag <link>: vincula a biblioteca Font Awesome.
+        rel="stylesheet": indica que é uma folha de estilos.
+        href="...": URL do CDN (Content Delivery Network) do Font Awesome versão 6.0.0-beta3.
+        all.min.css: versão minificada com todos os ícones disponíveis.
+    -->
+
+    <style>
+        /* 
+            Tag <style>: contém CSS (Cascading Style Sheets) interno.
+            Todo o código entre as tags <style> define a aparência visual da página.
+        */
+
+        /* =============================================================
+            1. RESET E VARIÁVEIS CSS (tema escuro padrão)
+           ============================================================= */
+        /* 
+            Comentário CSS de seção: organiza o código em blocos lógicos.
+            Esta seção contém o reset CSS e as variáveis de tema.
+        */
+
+        * {
+            /* 
+                Seletor universal (*): aplica estilos a TODOS os elementos HTML da página.
+                Usado para criar um "reset" CSS básico.
+            */
+
+            margin: 0;
+            /* 
+                Propriedade margin: define a margem externa do elemento.
+                Valor 0: remove todas as margens padrão que os navegadores aplicam.
+                Isso evita inconsistências entre diferentes navegadores.
+            */
+
+            padding: 0;
+            /* 
+                Propriedade padding: define o espaçamento interno do elemento.
+                Valor 0: remove todo o preenchimento interno padrão.
+                Garante que elementos comecem sem espaçamento interno.
+            */
+
+            box-sizing: border-box;
+            /* 
+                Propriedade box-sizing: define como a largura e altura são calculadas.
+                Valor border-box: inclui padding e border no tamanho total do elemento.
+                Com isso, se você definir width: 100px, o elemento terá exatamente 100px,
+                incluindo bordas e padding, facilitando muito o layout.
+            */
+        }
+
+        /* Definição das variáveis para o tema escuro (padrão) */
+        /* 
+            Comentário explicando que as variáveis a seguir definem o tema escuro.
+        */
+
+        :root {
+            /* 
+                Pseudo-classe :root: representa o elemento raiz do documento (<html>).
+                Variáveis CSS definidas aqui ficam disponíveis globalmente.
+                É o local ideal para definir variáveis de tema.
+            */
+
+            --bg: #0b1120;
+            /* 
+                Variável CSS personalizada (Custom Property).
+                --bg: nome da variável (começando com dois hífens).
+                #0b1120: cor hexadecimal (azul muito escuro, quase preto).
+                Será usada como cor de fundo da página no tema escuro.
+            */
+
+            --card-bg: #1a2332;
+            /* 
+                --card-bg: cor de fundo dos cards.
+                #1a2332: azul escuro, levemente mais claro que o fundo.
+                Cria contraste visual entre a página e os cards.
+            */
+
+            --text: #f1f5f9;
+            /* 
+                --text: cor principal do texto.
+                #f1f5f9: cinza muito claro, quase branco.
+                Garante boa legibilidade sobre fundo escuro.
+            */
+
+            --text-secondary: #94a3b8;
+            /* 
+                --text-secondary: cor secundária do texto.
+                #94a3b8: cinza médio.
+                Usado para textos menos importantes, labels, etc.
+            */
+
+            --border: #2d3a4f;
+            /* 
+                --border: cor das bordas.
+                #2d3a4f: azul acinzentado escuro.
+                Cria separação visual sutil entre elementos.
+            */
+
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            /* 
+                --shadow: sombra dos cards.
+                0: deslocamento horizontal (nenhum).
+                20px: deslocamento vertical (sombra abaixo).
+                60px: blur (desfoque da sombra).
+                rgba(0, 0, 0, 0.6): cor preta com 60% de opacidade.
+                Cria efeito de profundidade/elevação.
+            */
+
+            --radius: 24px;
+            /* 
+                --radius: raio de arredondamento dos cantos.
+                24px: cantos bem arredondados.
+                Dá aparência moderna e suave aos elementos.
+            */
+
+            --accent: #38bdf8;
+            /* 
+                --accent: cor de destaque/acento.
+                #38bdf8: azul claro vibrante (sky blue).
+                Usada para elementos interativos e destaques.
+            */
+
+            --accent-hover: #7dd3fc;
+            /* 
+                --accent-hover: cor de destaque ao passar o mouse.
+                #7dd3fc: azul ainda mais claro.
+                Feedback visual para interações.
+            */
+
+            --gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+            /* 
+                --gradient: gradiente para botões e destaques.
+                linear-gradient(): função CSS que cria um gradiente linear.
+                135deg: direção do gradiente (diagonal, do canto superior esquerdo).
+                #38bdf8: azul claro (cor inicial).
+                #818cf8: roxo/lilás (cor final).
+                Cria transição suave entre duas cores.
+            */
+        }
+
+        /* Aplicação das variáveis no corpo da página */
+        /* 
+            Comentário indicando que os estilos a seguir são aplicados ao body.
+        */
+
+        body {
+            /* 
+                Seletor body: aplica estilos ao elemento <body>.
+                O body contém todo o conteúdo visível da página.
+            */
+
+            font-family: 'Inter', sans-serif;
+            /* 
+                Propriedade font-family: define a fonte do texto.
+                'Inter': fonte principal (carregada do Google Fonts).
+                sans-serif: fonte de fallback caso Inter não carregue.
+                Sans-serif são fontes sem serifas (mais modernas e limpas).
+            */
+
+            background: var(--bg);
+            /* 
+                Propriedade background: define o fundo do elemento.
+                var(--bg): usa o valor da variável CSS --bg.
+                Isso permite trocar o tema alterando apenas a variável.
+            */
+
+            color: var(--text);
+            /* 
+                Propriedade color: define a cor do texto.
+                var(--text): usa a variável --text (texto claro).
+            */
+
+            display: flex;
+            /* 
+                Propriedade display: define o tipo de layout.
+                flex: ativa o Flexbox, um sistema de layout unidimensional.
+                Permite centralizar conteúdo facilmente.
+            */
+
+            justify-content: center;
+            /* 
+                Propriedade justify-content: alinha itens no eixo principal (horizontal).
+                center: centraliza o conteúdo horizontalmente.
+            */
+
+            align-items: center;
+            /* 
+                Propriedade align-items: alinha itens no eixo transversal (vertical).
+                center: centraliza o conteúdo verticalmente.
+            */
+
+            min-height: 100vh;
+            /* 
+                Propriedade min-height: define a altura mínima.
+                100vh: 100% da altura da viewport (área visível do navegador).
+                Garante que o body ocupe pelo menos toda a tela.
+            */
+
+            padding: 1.5rem;
+            /* 
+                Propriedade padding: espaçamento interno.
+                1.5rem: 1.5 vezes o tamanho da fonte raiz (geralmente 24px).
+                Cria margem interna para o conteúdo não encostar nas bordas.
+            */
+
+            transition: background 0.3s;
+            /* 
+                Propriedade transition: define animações suaves.
+                background: propriedade que será animada.
+                0.3s: duração da transição (300 milissegundos).
+                Suaviza a mudança de tema claro/escuro.
+            */
+        }
+
+        /* Container principal: usa grid para empilhar os cards */
+        /* 
+            Comentário explicando que o container usa CSS Grid.
+        */
+
+        .container {
+            /* 
+                Seletor de classe (.container): aplica estilos a elementos com class="container".
+                Classes são reutilizáveis e podem ser aplicadas a múltiplos elementos.
+            */
+
+            max-width: 800px;
+            /* 
+                Propriedade max-width: largura máxima do elemento.
+                800px: o container nunca terá mais que 800 pixels de largura.
+                Garante boa legibilidade em telas grandes.
+            */
+
+            width: 100%;
+            /* 
+                Propriedade width: largura do elemento.
+                100%: ocupa toda a largura disponível (até o max-width).
+                Torna o layout responsivo.
+            */
+
+            display: grid;
+            /* 
+                display: grid: ativa o CSS Grid, sistema de layout bidimensional.
+                Mais poderoso que Flexbox para layouts complexos.
+            */
+
+            grid-template-columns: 1fr;
+            /* 
+                Propriedade grid-template-columns: define colunas do grid.
+                1fr: uma coluna que ocupa toda a fração disponível.
+                Resultado: os cards são empilhados verticalmente.
+            */
+
+            gap: 1.5rem;
+            /* 
+                Propriedade gap: espaçamento entre itens do grid.
+                1.5rem: 24px de espaço entre os cards.
+            */
+        }
+
+        /* =============================================================
+            2. ESTILO DOS CARDS
+           ============================================================= */
+        /* 
+            Comentário de seção: estilos relacionados aos cards.
+        */
+
+        .card {
+            /* 
+                Seletor .card: estiliza elementos com class="card".
+            */
+
+            background: var(--card-bg);
+            /* 
+                Fundo do card usando a variável --card-bg.
+            */
+
+            border-radius: var(--radius);
+            /* 
+                Cantos arredondados usando a variável --radius (24px).
+            */
+
+            padding: 2rem 2rem 2.5rem;
+            /* 
+                Padding com três valores:
+                2rem: topo
+                2rem: laterais (esquerda e direita)
+                2.5rem: base
+                A base tem mais espaço para equilíbrio visual.
+            */
+
+            box-shadow: var(--shadow);
+            /* 
+                Sombra do card usando a variável --shadow.
+                Cria efeito de elevação/profundidade.
+            */
+
+            border: 1px solid var(--border);
+            /* 
+                Borda do card:
+                1px: espessura.
+                solid: estilo sólido (linha contínua).
+                var(--border): cor da variável.
+            */
+
+            transition: all 0.3s;
+            /* 
+                Transição suave em todas as propriedades.
+                all: aplica a qualquer propriedade que mudar.
+                0.3s: duração de 300ms.
+            */
+        }
+
+        /* Cabeçalho do card: flex para alinhar título e botão de tema */
+        /* 
+            Comentário explicando o propósito do card-header.
+        */
+
+        .card-header {
+            /* 
+                Seletor .card-header: cabeçalho dentro de cada card.
+            */
+
+            display: flex;
+            /* 
+                Flexbox para alinhar título e botão lado a lado.
+            */
+
+            justify-content: space-between;
+            /* 
+                Espaço máximo entre os itens.
+                Título fica à esquerda, botão à direita.
+            */
+
+            align-items: center;
+            /* 
+                Alinhamento vertical centralizado.
+            */
+
+            margin-bottom: 1.5rem;
+            /* 
+                Espaço de 24px abaixo do cabeçalho.
+            */
+        }
+
+        .card-header h1 {
+            /* 
+                Seletor descendente: h1 dentro de .card-header.
+                Estiliza especificamente o título do cabeçalho.
+            */
+
+            font-size: 1.8rem;
+            /* 
+                Tamanho da fonte: 1.8rem (aproximadamente 29px).
+            */
+
+            font-weight: 800;
+            /* 
+                Peso da fonte: 800 (extra-bold).
+                Torna o título bem destacado.
+            */
+
+            background: var(--gradient);
+            /* 
+                Aplica o gradiente como "fundo" do texto.
+            */
+
+            -webkit-background-clip: text;
+            /* 
+                Propriedade específica WebKit (Chrome, Safari).
+                background-clip: text: recorta o fundo no formato do texto.
+                O gradiente só aparece onde há texto.
+            */
+
+            -webkit-text-fill-color: transparent;
+            /* 
+                Torna a cor do texto transparente.
+                Assim, o gradiente de fundo fica visível através do texto.
+            */
+
+            background-clip: text;
+            /* 
+                Versão padrão (sem prefixo) para outros navegadores.
+            */
+        }
+
+        /* Botão de alternância de tema */
+        /* 
+            Comentário explicando que este é o botão de trocar tema.
+        */
+
+        .theme-toggle {
+            /* 
+                Seletor .theme-toggle: botão de alternância de tema.
+            */
+
+            background: none;
+            /* 
+                Sem cor de fundo (transparente).
+            */
+
+            border: 2px solid var(--border);
+            /* 
+                Borda de 2px com cor da variável.
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor do texto/ícone.
+            */
+
+            padding: 0.5rem 0.8rem;
+            /* 
+                Padding interno:
+                0.5rem: vertical (8px)
+                0.8rem: horizontal (aproximadamente 13px)
+            */
+
+            border-radius: 40px;
+            /* 
+                Raio grande cria formato "pill" (pílula).
+            */
+
+            cursor: pointer;
+            /* 
+                Cursor de mão ao passar sobre o botão.
+                Indica que é clicável.
+            */
+
+            font-size: 1rem;
+            /* 
+                Tamanho da fonte: 1rem (16px padrão).
+            */
+
+            transition: all 0.2s;
+            /* 
+                Transição suave de 200ms em todas as propriedades.
+            */
+        }
+
+        .theme-toggle:hover {
+            /* 
+                Pseudo-classe :hover: estilos quando o mouse está sobre o elemento.
+            */
+
+            border-color: var(--accent);
+            /* 
+                Muda a cor da borda para a cor de destaque.
+            */
+
+            color: var(--text);
+            /* 
+                Muda a cor do texto para mais claro.
+            */
+        }
+
+        /* =============================================================
+            3. CAMPOS DE ENTRADA (peso e altura)
+           ============================================================= */
+        /* 
+            Comentário de seção: estilos dos campos de formulário.
+        */
+
+        .input-group {
+            /* 
+                Seletor .input-group: agrupa label + input.
+            */
+
+            margin-bottom: 1.2rem;
+            /* 
+                Espaço de aproximadamente 19px abaixo de cada grupo.
+            */
+        }
+
+        .input-group label {
+            /* 
+                Seletor descendente: label dentro de .input-group.
+            */
+
+            display: block;
+            /* 
+                display: block: faz o label ocupar toda a linha.
+                Por padrão, labels são inline.
+            */
+
+            font-weight: 600;
+            /* 
+                Peso semi-bold para destaque.
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor secundária (cinza médio).
+            */
+
+            margin-bottom: 0.3rem;
+            /* 
+                Pequeno espaço entre label e input.
+            */
+
+            font-size: 0.9rem;
+            /* 
+                Fonte um pouco menor que o padrão.
+            */
+        }
+
+        .input-group label i {
+            /* 
+                Seletor descendente: ícone (i) dentro do label.
+                Font Awesome usa a tag <i> para ícones.
+            */
+
+            margin-right: 0.5rem;
+            /* 
+                Espaço entre o ícone e o texto do label.
+            */
+
+            color: var(--accent);
+            /* 
+                Ícone na cor de destaque (azul).
+            */
+        }
+
+        .input-group input {
+            /* 
+                Seletor descendente: input dentro de .input-group.
+            */
+
+            width: 100%;
+            /* 
+                Largura total do container pai.
+            */
+
+            padding: 0.8rem 1rem;
+            /* 
+                Padding interno:
+                0.8rem: vertical
+                1rem: horizontal
+            */
+
+            background: var(--bg);
+            /* 
+                Fundo igual ao da página (mais escuro que o card).
+                Cria efeito de campo "afundado".
+            */
+
+            border: 2px solid var(--border);
+            /* 
+                Borda de 2px.
+            */
+
+            border-radius: 12px;
+            /* 
+                Cantos arredondados.
+            */
+
+            font-size: 1rem;
+            /* 
+                Tamanho de fonte padrão.
+            */
+
+            color: var(--text);
+            /* 
+                Cor do texto digitado.
+            */
+
+            transition: border 0.2s;
+            /* 
+                Transição suave na borda ao focar.
+            */
+
+            outline: none;
+            /* 
+                Remove o contorno padrão azul do navegador ao focar.
+                Será substituído por estilo personalizado.
+            */
+        }
+
+        .input-group input:focus {
+            /* 
+                Pseudo-classe :focus: estilos quando o input está focado.
+                Focado = usuário clicou ou navegou com Tab.
+            */
+
+            border-color: var(--accent);
+            /* 
+                Borda azul ao focar.
+            */
+
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+            /* 
+                Sombra tipo "ring" ao redor do input:
+                0: offset X
+                0: offset Y
+                0: blur
+                3px: spread (expansão)
+                rgba(56, 189, 248, 0.2): azul com 20% opacidade.
+                Cria efeito de "glow" sutil.
+            */
+        }
+
+        /* =============================================================
+            4. BOTÃO CALCULAR
+           ============================================================= */
+        /* 
+            Comentário de seção: estilos do botão principal.
+        */
+
+        .btn-calc {
+            /* 
+                Seletor .btn-calc: botão de calcular IMC.
+            */
+
+            width: 100%;
+            /* 
+                Largura total do container.
+            */
+
+            padding: 1rem;
+            /* 
+                Padding interno de 16px em todos os lados.
+            */
+
+            background: var(--gradient);
+            /* 
+                Fundo com gradiente azul-roxo.
+            */
+
+            border: none;
+            /* 
+                Remove a borda padrão de botões.
+            */
+
+            border-radius: 14px;
+            /* 
+                Cantos bem arredondados.
+            */
+
+            font-size: 1.1rem;
+            /* 
+                Fonte levemente maior para destaque.
+            */
+
+            font-weight: 700;
+            /* 
+                Negrito.
+            */
+
+            color: #fff;
+            /* 
+                Texto branco.
+            */
+
+            cursor: pointer;
+            /* 
+                Cursor de mão indicando clicável.
+            */
+
+            transition: transform 0.15s, box-shadow 0.3s;
+            /* 
+                Transições:
+                transform: 150ms (movimento rápido)
+                box-shadow: 300ms (sombra mais suave)
+            */
+
+            display: flex;
+            /* 
+                Flexbox para alinhar ícone e texto.
+            */
+
+            align-items: center;
+            /* 
+                Alinhamento vertical centralizado.
+            */
+
+            justify-content: center;
+            /* 
+                Alinhamento horizontal centralizado.
+            */
+
+            gap: 0.5rem;
+            /* 
+                Espaço de 8px entre ícone e texto.
+            */
+
+            margin-top: 0.5rem;
+            /* 
+                Pequeno espaço acima do botão.
+            */
+        }
+
+        .btn-calc:hover {
+            /* 
+                Estilos ao passar o mouse sobre o botão.
+            */
+
+            transform: translateY(-3px);
+            /* 
+                Move o botão 3px para cima.
+                Cria efeito de "levitação".
+            */
+
+            box-shadow: 0 8px 30px rgba(56, 189, 248, 0.3);
+            /* 
+                Sombra azul brilhante.
+                Reforça o efeito de elevação.
+            */
+        }
+
+        .btn-calc:active {
+            /* 
+                Pseudo-classe :active: estilos durante o clique.
+            */
+
+            transform: scale(0.97);
+            /* 
+                Reduz o tamanho para 97%.
+                Cria feedback tátil de "pressionar".
+            */
+        }
+
+        /* =============================================================
+            5. MEDIDOR ANALÓGICO (Canvas)
+           ============================================================= */
+        /* 
+            Comentário de seção: estilos do medidor (velocímetro).
+        */
+
+        .medidor {
+            /* 
+                Seletor .medidor: container do canvas e legenda.
+            */
+
+            display: flex;
+            /* 
+                Flexbox para layout.
+            */
+
+            flex-direction: column;
+            /* 
+                Empilha elementos verticalmente.
+            */
+
+            align-items: center;
+            /* 
+                Centraliza horizontalmente.
+            */
+
+            margin: 1.5rem 0;
+            /* 
+                Margem vertical de 24px.
+            */
+        }
+
+        .medidor canvas {
+            /* 
+                Seletor descendente: canvas dentro de .medidor.
+            */
+
+            width: 100%;
+            /* 
+                Largura responsiva (100% do container).
+            */
+
+            max-width: 280px;
+            /* 
+                Largura máxima de 280px.
+            */
+
+            height: auto;
+            /* 
+                Altura automática mantém proporção.
+            */
+
+            aspect-ratio: 1/1;
+            /* 
+                Propriedade aspect-ratio: mantém proporção 1:1 (quadrado).
+                Mesmo que a largura mude, altura acompanha proporcionalmente.
+            */
+
+            display: block;
+            /* 
+                Remove espaço extra abaixo (canvas é inline por padrão).
+            */
+
+            margin: 0 auto;
+            /* 
+                Centraliza horizontalmente.
+            */
+        }
+
+        /* Legenda abaixo do medidor */
+        /* 
+            Comentário explicando o propósito da legenda.
+        */
+
+        .medidor .legenda {
+            /* 
+                Seletor descendente: .legenda dentro de .medidor.
+            */
+
+            display: flex;
+            /* 
+                Flexbox para distribuir horizontalmente.
+            */
+
+            justify-content: space-around;
+            /* 
+                Distribui espaço igual ao redor dos itens.
+            */
+
+            width: 100%;
+            /* 
+                Largura total.
+            */
+
+            margin-top: 0.5rem;
+            /* 
+                Pequeno espaço acima.
+            */
+
+            font-size: 0.7rem;
+            /* 
+                Fonte pequena (11px aproximadamente).
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor cinza.
+            */
+        }
+
+        .medidor .legenda span {
+            /* 
+                Seletor descendente: span dentro de .legenda.
+                Cada item da legenda é um span.
+            */
+
+            display: flex;
+            /* 
+                Flexbox para alinhar bolinha e texto.
+            */
+
+            align-items: center;
+            /* 
+                Alinhamento vertical centralizado.
+            */
+
+            gap: 4px;
+            /* 
+                Espaço entre bolinha de cor e texto.
+            */
+        }
+
+        .medidor .legenda .cor {
+            /* 
+                Seletor descendente: elemento com class="cor".
+                São as bolinhas coloridas da legenda.
+            */
+
+            width: 12px;
+            /* 
+                Largura da bolinha.
+            */
+
+            height: 12px;
+            /* 
+                Altura da bolinha (quadrado).
+            */
+
+            border-radius: 4px;
+            /* 
+                Cantos levemente arredondados.
+                Cria quadrado com cantos suaves, não círculo.
+            */
+        }
+
+        /* =============================================================
+            6. RESULTADO TEXTUAL (abaixo do medidor)
+           ============================================================= */
+        /* 
+            Comentário de seção: área que exibe o resultado numérico e textual.
+        */
+
+        #resultado-texto {
+            /* 
+                Seletor de ID (#): aplica ao elemento com id="resultado-texto".
+                IDs são únicos na página e têm maior especificidade que classes.
+            */
+
+            text-align: center;
+            /* 
+                Centraliza o texto.
+            */
+
+            margin-top: 0.5rem;
+            /* 
+                Pequeno espaço acima.
+            */
+
+            font-size: 1.2rem;
+            /* 
+                Fonte um pouco maior.
+            */
+
+            font-weight: 600;
+            /* 
+                Semi-bold.
+            */
+        }
+
+        #resultado-texto .imc-num {
+            /* 
+                Seletor descendente: elemento com class="imc-num".
+                Exibe o valor numérico do IMC.
+            */
+
+            font-size: 2.5rem;
+            /* 
+                Fonte grande para destaque (40px).
+            */
+
+            font-weight: 800;
+            /* 
+                Extra-bold.
+            */
+
+            background: var(--gradient);
+            /* 
+                Gradiente como fundo do texto.
+            */
+
+            -webkit-background-clip: text;
+            /* 
+                Recorta o gradiente na forma do texto (WebKit).
+            */
+
+            -webkit-text-fill-color: transparent;
+            /* 
+                Texto transparente para mostrar gradiente.
+            */
+
+            background-clip: text;
+            /* 
+                Versão padrão sem prefixo.
+            */
+        }
+
+        #resultado-texto .classif {
+            /* 
+                Classe .classif: exibe a classificação (ex: "Peso normal").
+            */
+
+            display: block;
+            /* 
+                Força quebra de linha (aparece abaixo do número).
+            */
+
+            font-size: 1.1rem;
+            /* 
+                Tamanho de fonte médio.
+            */
+
+            font-weight: 400;
+            /* 
+                Peso normal (não negrito).
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor cinza.
+            */
+
+            margin-top: 4px;
+            /* 
+                Pequeno espaço acima.
+            */
+        }
+
+        #resultado-texto .risco {
+            /* 
+                Classe .risco: exibe o nível de risco.
+            */
+
+            display: block;
+            /* 
+                Força quebra de linha.
+            */
+
+            font-size: 0.9rem;
+            /* 
+                Fonte menor.
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor cinza.
+            */
+
+            margin-top: 2px;
+            /* 
+                Espaço mínimo acima.
+            */
+        }
+
+        #resultado-texto .recomendacao {
+            /* 
+                Classe .recomendacao: dica de saúde personalizada.
+            */
+
+            font-size: 0.95rem;
+            /* 
+                Fonte levemente menor.
+            */
+
+            margin-top: 8px;
+            /* 
+                Espaço acima.
+            */
+
+            background: var(--bg);
+            /* 
+                Fundo igual ao da página (mais escuro).
+            */
+
+            padding: 0.5rem 1rem;
+            /* 
+                Padding interno.
+            */
+
+            border-radius: 30px;
+            /* 
+                Cantos muito arredondados (formato pill).
+            */
+
+            display: inline-block;
+            /* 
+                Ajusta a largura ao conteúdo (não ocupa linha toda).
+            */
+
+            border: 1px solid var(--border);
+            /* 
+                Borda sutil.
+            */
+        }
+
+        /* =============================================================
+            7. GRÁFICO DE BARRAS (histórico) e TABELA
+           ============================================================= */
+        /* 
+            Comentário de seção: estilos do histórico.
+        */
+
+        .historico-container {
+            /* 
+                Container principal do histórico.
+            */
+
+            margin-top: 1.5rem;
+            /* 
+                Espaço acima.
+            */
+
+            border-top: 2px solid var(--border);
+            /* 
+                Linha divisória no topo.
+            */
+
+            padding-top: 1rem;
+            /* 
+                Espaço entre a linha e o conteúdo.
+            */
+        }
+
+        .historico-container h3 {
+            /* 
+                Título da seção de histórico.
+            */
+
+            font-size: 1rem;
+            /* 
+                Tamanho padrão.
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor cinza.
+            */
+
+            display: flex;
+            /* 
+                Flexbox para alinhar título e botão limpar.
+            */
+
+            justify-content: space-between;
+            /* 
+                Espaço entre título e botão.
+            */
+
+            align-items: center;
+            /* 
+                Alinhamento vertical.
+            */
+
+            margin-bottom: 0.8rem;
+            /* 
+                Espaço abaixo.
+            */
+        }
+
+        .historico-container h3 button {
+            /* 
+                Botão "Limpar" dentro do h3.
+            */
+
+            background: none;
+            /* 
+                Sem fundo.
+            */
+
+            border: none;
+            /* 
+                Sem borda.
+            */
+
+            color: var(--accent);
+            /* 
+                Cor azul de destaque.
+            */
+
+            cursor: pointer;
+            /* 
+                Cursor de mão.
+            */
+
+            font-weight: 600;
+            /* 
+                Semi-bold.
+            */
+        }
+
+        .historico-container h3 button:hover {
+            /* 
+                Hover no botão limpar.
+            */
+
+            text-decoration: underline;
+            /* 
+                Sublinhado ao passar o mouse.
+            */
+        }
+
+        /* Container das barras: flex horizontal com alinhamento inferior */
+        /* 
+            Comentário explicando o layout do gráfico de barras.
+        */
+
+        .barras-container {
+            /* 
+                Container que abriga as barras do gráfico.
+            */
+
+            display: flex;
+            /* 
+                Flexbox horizontal.
+            */
+
+            align-items: flex-end;
+            /* 
+                Alinha as barras pela base (parte inferior).
+                Isso faz barras maiores crescerem para cima.
+            */
+
+            height: 120px;
+            /* 
+                Altura fixa do gráfico.
+            */
+
+            gap: 6px;
+            /* 
+                Espaço entre as barras.
+            */
+
+            padding: 0.5rem 0;
+            /* 
+                Padding vertical.
+            */
+
+            overflow-x: auto;
+            /* 
+                Permite rolagem horizontal se houver muitas barras.
+            */
+
+            margin-bottom: 1rem;
+            /* 
+                Espaço abaixo do gráfico.
+            */
+        }
+
+        .barra-item {
+            /* 
+                Cada item (barra + label) do gráfico.
+            */
+
+            display: flex;
+            /* 
+                Flexbox.
+            */
+
+            flex-direction: column;
+            /* 
+                Empilha verticalmente: barra em cima, label embaixo.
+            */
+
+            align-items: center;
+            /* 
+                Centraliza horizontalmente.
+            */
+
+            min-width: 30px;
+            /* 
+                Largura mínima para cada item.
+            */
+
+            flex-shrink: 0;
+            /* 
+                Impede que o item encolha quando espaço é limitado.
+                Garante que todas as barras tenham tamanho adequado.
+            */
+        }
+
+        .barra-item .barra {
+            /* 
+                A barra propriamente dita.
+            */
+
+            width: 20px;
+            /* 
+                Largura fixa da barra.
+            */
+
+            border-radius: 6px 6px 0 0;
+            /* 
+                Cantos arredondados apenas no topo.
+                Valores: top-left, top-right, bottom-right, bottom-left.
+            */
+
+            background: var(--gradient);
+            /* 
+                Cor padrão (será sobrescrita via JavaScript inline).
+            */
+
+            transition: height 0.4s ease;
+            /* 
+                Animação suave quando a altura muda.
+                ease: aceleração suave.
+            */
+
+            min-height: 4px;
+            /* 
+                Altura mínima para garantir visibilidade mesmo com IMC baixo.
+            */
+        }
+
+        .barra-item .label {
+            /* 
+                Label abaixo de cada barra (valor do IMC).
+            */
+
+            font-size: 0.55rem;
+            /* 
+                Fonte bem pequena.
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor cinza.
+            */
+
+            margin-top: 4px;
+            /* 
+                Espaço entre barra e label.
+            */
+
+            white-space: nowrap;
+            /* 
+                Impede quebra de linha no texto.
+            */
+        }
+
+        .historico-vazio {
+            /* 
+                Mensagem quando não há histórico.
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor cinza.
+            */
+
+            font-style: italic;
+            /* 
+                Texto em itálico.
+            */
+
+            padding: 1rem 0;
+            /* 
+                Espaçamento vertical.
+            */
+
+            text-align: center;
+            /* 
+                Texto centralizado.
+            */
+
+            width: 100%;
+            /* 
+                Largura total para centralização funcionar.
+            */
+        }
+
+        /* Tabela de histórico (detalhada) */
+        /* 
+            Comentário sobre a tabela.
+        */
+
+        .tabela-historico {
+            /* 
+                Tabela com registros detalhados.
+            */
+
+            width: 100%;
+            /* 
+                Largura total.
+            */
+
+            border-collapse: collapse;
+            /* 
+                Remove espaço entre células da tabela.
+                As bordas das células se fundem.
+            */
+
+            font-size: 0.8rem;
+            /* 
+                Fonte menor para caber mais dados.
+            */
+
+            margin-top: 0.5rem;
+            /* 
+                Espaço acima.
+            */
+        }
+
+        .tabela-historico th {
+            /* 
+                Células de cabeçalho da tabela.
+            */
+
+            text-align: left;
+            /* 
+                Alinhamento à esquerda.
+            */
+
+            padding: 0.4rem 0.2rem;
+            /* 
+                Padding interno.
+            */
+
+            border-bottom: 2px solid var(--border);
+            /* 
+                Borda inferior mais grossa (separador).
+            */
+
+            color: var(--text-secondary);
+            /* 
+                Cor cinza.
+            */
+
+            font-weight: 600;
+            /* 
+                Semi-bold.
+            */
+        }
+
+        .tabela-historico td {
+            /* 
+                Células de dados da tabela.
+            */
+
+            padding: 0.3rem 0.2rem;
+            /* 
+                Padding interno.
+            */
+
+            border-bottom: 1px solid var(--border);
+            /* 
+                Borda inferior fina.
+            */
+
+            color: var(--text);
+            /* 
+                Cor do texto principal.
+            */
+        }
+
+        .tabela-historico tr:hover td {
+            /* 
+                Pseudo-classe :hover em tr (linha).
+                Aplica estilo a todos os td da linha ao passar o mouse.
+            */
+
+            background: rgba(56, 189, 248, 0.05);
+            /* 
+                Fundo azul muito sutil (5% opacidade).
+                Feedback visual ao passar o mouse.
+            */
+        }
+
+        /* =============================================================
+            8. RESPONSIVIDADE (telas menores)
+           ============================================================= */
+        /* 
+            Comentário de seção: media queries para responsividade.
+        */
+
+        @media (max-width: 500px) {
+            /* 
+                @media: regra condicional.
+                (max-width: 500px): aplica apenas quando a tela tem no máximo 500px de largura.
+                Usado para ajustar o layout em dispositivos móveis.
+            */
+
+            .container {
+                /* 
+                    Ajustes no container para telas pequenas.
+                */
+
+                padding: 0;
+                /* 
+                    Remove padding extra para aproveitar toda a largura.
+                */
+            }
+
+            .card {
+                /* 
+                    Ajustes nos cards.
+                */
+
+                padding: 1.5rem;
+                /* 
+                    Reduz o padding interno (de 2rem para 1.5rem).
+                */
+            }
+
+            .card-header h1 {
+                /* 
+                    Ajuste no título.
+                */
+
+                font-size: 1.4rem;
+                /* 
+                    Título menor para caber na tela.
+                */
+            }
+
+            .tabela-historico {
+                /* 
+                    Ajuste na tabela.
+                */
+
+                font-size: 0.7rem;
+                /* 
+                    Fonte ainda menor para caber mais colunas.
+                */
+            }
+        }
+    </style>
+    <!-- 
+        Fim da tag </style>: encerra o bloco de CSS interno.
+    -->
+</head>
+<!-- 
+    Fim da tag </head>: encerra a seção de metadados.
+-->
+
+<body>
+    <!-- 
+        Tag <body>: contém todo o conteúdo visível da página.
+        Tudo que o usuário vê está dentro do body.
+    -->
+
+    <!-- Container principal -->
+    <!-- 
+        Comentário HTML: indica o início do container principal.
+    -->
+
+    <div class="container">
+        <!-- 
+            Tag <div>: divisão genérica, usada para agrupar elementos.
+            class="container": aplica os estilos CSS definidos para .container.
+            Este div agrupa todos os cards da aplicação.
+        -->
+
+        <!-- ===== CARD PRINCIPAL (entradas, medidor, resultado) ===== -->
+        <!-- 
+            Comentário indicando o início do primeiro card.
+        -->
+
+        <div class="card">
+            <!-- 
+                Primeiro card: contém formulário, medidor e resultado.
+            -->
+
+            <!-- Cabeçalho com título e botão de tema -->
+            <!-- 
+                Comentário sobre o cabeçalho do card.
+            -->
+
+            <div class="card-header">
+                <!-- 
+                    Container do cabeçalho.
+                -->
+
+                <h1><i class="fas fa-gauge-high"></i> IMC Dashboard</h1>
+                <!-- 
+                    Tag <h1>: título principal de nível 1.
+                    <i class="fas fa-gauge-high">: ícone do Font Awesome.
+                        - fas: Font Awesome Solid (estilo sólido).
+                        - fa-gauge-high: ícone de velocímetro/medidor.
+                    " IMC Dashboard": texto do título.
+                -->
+
+                <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> Tema</button>
+                <!-- 
+                    Tag <button>: botão clicável.
+                    class="theme-toggle": aplica estilos do botão de tema.
+                    id="themeToggle": identificador único para JavaScript.
+                    <i class="fas fa-moon">: ícone de lua (tema escuro).
+                    " Tema": texto do botão.
+                -->
+            </div>
+            <!-- 
+                Fim do card-header.
+            -->
+
+            <!-- Campos de entrada -->
+            <!-- 
+                Comentário sobre os campos de formulário.
+            -->
+
+            <div class="input-group">
+                <!-- 
+                    Grupo do campo de peso.
+                -->
+
+                <label for="peso"><i class="fas fa-weight-scale"></i> Peso (kg)</label>
+                <!-- 
+                    Tag <label>: rótulo do campo.
+                    Atributo for="peso": associa o label ao input com id="peso".
+                        Clicar no label foca o input.
+                    <i class="fas fa-weight-scale">: ícone de balança.
+                    " Peso (kg)": texto do label.
+                -->
+
+                <input type="number" id="peso" placeholder="Ex: 70.5" step="0.1" min="0">
+                <!-- 
+                    Tag <input>: campo de entrada de dados.
+                    type="number": aceita apenas números.
+                        Exibe teclado numérico em dispositivos móveis.
+                    id="peso": identificador único para JavaScript e label.
+                    placeholder="Ex: 70.5": texto de exemplo quando o campo está vazio.
+                    step="0.1": incremento de 0.1 ao usar as setas.
+                    min="0": valor mínimo permitido (não aceita negativos).
+                -->
+            </div>
+            <!-- 
+                Fim do input-group do peso.
+            -->
+
+            <div class="input-group">
+                <!-- 
+                    Grupo do campo de altura.
+                -->
+
+                <label for="altura"><i class="fas fa-ruler"></i> Altura (m)</label>
+                <!-- 
+                    Label do campo altura.
+                    <i class="fas fa-ruler">: ícone de régua.
+                -->
+
+                <input type="number" id="altura" placeholder="Ex: 1.75" step="0.01" min="0">
+                <!-- 
+                    Input da altura.
+                    step="0.01": incremento de 0.01 (para centímetros).
+                -->
+            </div>
+            <!-- 
+                Fim do input-group da altura.
+            -->
+
+            <!-- Botão calcular -->
+            <!-- 
+                Comentário sobre o botão de calcular.
+            -->
+
+            <button class="btn-calc" id="calcularBtn"><i class="fas fa-play"></i> Calcular IMC</button>
+            <!-- 
+                Botão principal de cálculo.
+                class="btn-calc": estilos do botão gradiente.
+                id="calcularBtn": identificador para JavaScript.
+                <i class="fas fa-play">: ícone de play.
+                " Calcular IMC": texto do botão.
+            -->
+
+            <!-- Medidor Analógico (Canvas) -->
+            <!-- 
+                Comentário sobre a área do medidor.
+            -->
+
+            <div class="medidor">
+                <!-- 
+                    Container do medidor e legenda.
+                -->
+
+                <canvas id="medidorCanvas" width="400" height="400"></canvas>
+                <!-- 
+                    Tag <canvas>: área de desenho controlada por JavaScript.
+                    id="medidorCanvas": identificador para JavaScript.
+                    width="400": largura interna do canvas em pixels.
+                    height="400": altura interna do canvas em pixels.
+                    Nota: a largura/altura do canvas define a resolução interna.
+                    O CSS pode redimensionar visualmente, mas a resolução é fixa.
+                -->
+
+                <!-- Legenda com cores -->
+                <!-- 
+                    Comentário sobre a legenda.
+                -->
+
+                <div class="legenda">
+                    <!-- 
+                        Container da legenda.
+                    -->
+
+                    <span><span class="cor" style="background:#facc15;"></span> Baixo</span>
+                    <!-- 
+                        Item da legenda: IMC baixo.
+                        <span class="cor" style="background:#facc15;">: quadradinho amarelo.
+                            style="background:#facc15;": CSS inline (sobrescreve regras).
+                            #facc15: amarelo (mesma cor do medidor).
+                        </span>: fecha o span da cor.
+                        " Baixo": texto descritivo.
+                        </span>: fecha o span do item.
+                    -->
+
+                    <span><span class="cor" style="background:#22c55e;"></span> Normal</span>
+                    <!-- 
+                        Item da legenda: IMC normal.
+                        #22c55e: verde.
+                    -->
+
+                    <span><span class="cor" style="background:#f97316;"></span> Sobrepeso</span>
+                    <!-- 
+                        Item da legenda: sobrepeso.
+                        #f97316: laranja.
+                    -->
+
+                    <span><span class="cor" style="background:#ef4444;"></span> Obesidade</span>
+                    <!-- 
+                        Item da legenda: obesidade.
+                        #ef4444: vermelho.
+                    -->
+                </div>
+                <!-- 
+                    Fim da legenda.
+                -->
+            </div>
+            <!-- 
+                Fim do container .medidor.
+            -->
+
+            <!-- Resultado textual (IMC, classificação, risco e recomendação) -->
+            <!-- 
+                Comentário sobre a área de resultado.
+            -->
+
+            <div id="resultado-texto">
+                <!-- 
+                    Container do resultado textual.
+                    id="resultado-texto": para seleção via JavaScript.
+                -->
+
+                <span class="imc-num">--</span>
+                <!-- 
+                    Exibe o valor numérico do IMC.
+                    "--": placeholder inicial (sem cálculo).
+                -->
+
+                <span class="classif">Aguardando dados</span>
+                <!-- 
+                    Exibe a classificação do IMC.
+                    "Aguardando dados": mensagem inicial.
+                -->
+
+                <span class="risco"></span>
+                <!-- 
+                    Exibe o nível de risco.
+                    Vazio inicialmente.
+                -->
+
+                <div class="recomendacao"><i class="fas fa-lightbulb"></i> Insira peso e altura</div>
+                <!-- 
+                    Dica/recomendação de saúde.
+                    <i class="fas fa-lightbulb">: ícone de lâmpada (ideia/dica).
+                    "Insira peso e altura": instrução inicial.
+                -->
+            </div>
+            <!-- 
+                Fim do resultado-texto.
+            -->
+        </div>
+        <!-- 
+            Fim do primeiro card (calculadora).
+        -->
+
+        <!-- ===== CARD DO HISTÓRICO COM GRÁFICO DE BARRAS E TABELA ===== -->
+        <!-- 
+            Comentário indicando o início do segundo card.
+        -->
+
+        <div class="card">
+            <!-- 
+                Segundo card: histórico de cálculos.
+            -->
+
+            <div class="historico-container">
+                <!-- 
+                    Container principal do histórico.
+                -->
+
+                <h3>
+                    <!-- 
+                        Título da seção com botão de limpar.
+                    -->
+
+                    <span><i class="fas fa-chart-bar"></i> Histórico e Evolução</span>
+                    <!-- 
+                        <span>: agrupa ícone e texto do título.
+                        <i class="fas fa-chart-bar">: ícone de gráfico de barras.
+                    -->
+
+                    <button id="limparHistoricoBtn">Limpar</button>
+                    <!-- 
+                        Botão para limpar o histórico.
+                        id="limparHistoricoBtn": identificador para JavaScript.
+                    -->
+                </h3>
+                <!-- 
+                    Fim do h3.
+                -->
+
+                <!-- Container das barras -->
+                <!-- 
+                    Comentário sobre o gráfico de barras.
+                -->
+
+                <div id="barrasContainer" class="barras-container">
+                    <!-- 
+                        Container onde as barras do gráfico serão inseridas via JavaScript.
+                        id="barrasContainer": para manipulação via JavaScript.
+                        class="barras-container": estilos do gráfico.
+                    -->
+
+                    <div class="historico-vazio">Nenhum registro ainda</div>
+                    <!-- 
+                        Mensagem inicial quando não há histórico.
+                        Será substituída por barras quando houver dados.
+                    -->
+                </div>
+                <!-- 
+                    Fim do barrasContainer.
+                -->
+
+                <!-- Tabela de histórico (detalhada) -->
+                <!-- 
+                    Comentário sobre a tabela.
+                -->
+
+                <div id="tabelaContainer" style="max-height: 200px; overflow-y: auto;">
+                    <!-- 
+                        Container da tabela com scroll.
+                        style="max-height: 200px;": altura máxima de 200px.
+                        overflow-y: auto;: adiciona barra de rolagem vertical se necessário.
+                    -->
+
+                    <table class="tabela-historico" id="tabelaHistorico">
+                        <!-- 
+                            Tag <table>: cria uma tabela.
+                            class="tabela-historico": aplica estilos da tabela.
+                            id="tabelaHistorico": identificador para JavaScript.
+                        -->
+
+                        <thead>
+                            <!-- 
+                                Tag <thead>: cabeçalho da tabela.
+                                Contém os títulos das colunas.
+                            -->
+
+                            <tr>
+                                <!-- 
+                                    Tag <tr>: linha da tabela (table row).
+                                -->
+
+                                <th>#</th>
+                                <!-- 
+                                    Tag <th>: célula de cabeçalho (table header).
+                                    "#": número sequencial do registro.
+                                -->
+
+                                <th>Data</th>
+                                <!-- 
+                                    Coluna de data/hora do registro.
+                                -->
+
+                                <th>Peso</th>
+                                <!-- 
+                                    Coluna de peso.
+                                -->
+
+                                <th>Altura</th>
+                                <!-- 
+                                    Coluna de altura.
+                                -->
+
+                                <th>IMC</th>
+                                <!-- 
+                                    Coluna de valor do IMC.
+                                -->
+
+                                <th>Classificação</th>
+                                <!-- 
+                                    Coluna de classificação (Normal, Sobrepeso, etc.).
+                                -->
+                            </tr>
+                            <!-- 
+                                Fim da linha do cabeçalho.
+                            -->
+                        </thead>
+                        <!-- 
+                            Fim do thead.
+                        -->
+
+                        <tbody id="corpoTabela">
+                            <!-- 
+                                Tag <tbody>: corpo da tabela.
+                                Contém as linhas de dados.
+                                id="corpoTabela": para inserção de dados via JavaScript.
+                            -->
+
+                            <tr>
+                                <!-- 
+                                    Linha inicial (placeholder).
+                                -->
+
+                                <td colspan="6" style="text-align:center; color: var(--text-secondary);">Nenhum registro
+                                </td>
+                                <!-- 
+                                    Tag <td>: célula de dados (table data).
+                                    colspan="6": a célula ocupa 6 colunas (toda a largura).
+                                    style="...": estilo inline para centralizar e colorir.
+                                    "Nenhum registro": mensagem quando não há dados.
+                                -->
+                            </tr>
+                            <!-- 
+                                Fim da linha placeholder.
+                            -->
+                        </tbody>
+                        <!-- 
+                            Fim do tbody.
+                        -->
+                    </table>
+                    <!-- 
+                        Fim da tabela.
+                    -->
+                </div>
+                <!-- 
+                    Fim do tabelaContainer.
+                -->
+            </div>
+            <!-- 
+                Fim do historico-container.
+            -->
+        </div>
+        <!-- 
+            Fim do segundo card (histórico).
+        -->
+    </div>
+    <!-- 
+        Fim do container principal.
+    -->
+
+    <!-- ================================================================
+         JAVASCRIPT – Toda a lógica do lado do cliente
+         ================================================================ -->
+    <!-- 
+        Comentário HTML indicando o início do bloco JavaScript.
+    -->
+
+    <script>
+        /*
+            Tag <script>: contém código JavaScript.
+            JavaScript é a linguagem de programação que adiciona
+            interatividade e lógica à página web.
+        */
+
+        (function () {
+            /*
+                IIFE (Immediately Invoked Function Expression).
+                É uma função que é executada imediatamente após ser definida.
+                
+                Sintaxe: (function() { ... })();
+                
+                Vantagens:
+                - Cria um escopo privado (variáveis não vazam para o global).
+                - Evita conflitos com outros scripts na página.
+                - Padrão comum para encapsulamento em JavaScript.
+            */
+
+            'use strict';
+            /*
+                Diretiva 'use strict': ativa o modo estrito do JavaScript.
+                
+                Benefícios:
+                - Erros silenciosos se tornam erros explícitos.
+                - Impede uso de variáveis não declaradas.
+                - Proíbe algumas sintaxes problemáticas.
+                - Melhora a segurança e performance do código.
+            */
+
+            // ============================================================
+            // 1. REFERÊNCIAS AOS ELEMENTOS DOM
+            // ============================================================
+            /*
+                Comentário de seção: aqui obtemos referências aos elementos HTML.
+                DOM = Document Object Model (representação da página em objetos).
+            */
+
+            const pesoInput = document.getElementById('peso');
+            /*
+                const: declara uma constante (valor não pode ser reatribuído).
+                pesoInput: nome da variável que armazena a referência.
+                document: objeto que representa toda a página HTML.
+                getElementById('peso'): método que busca elemento pelo ID.
+                Retorna o elemento <input id="peso">.
+            */
+
+            const alturaInput = document.getElementById('altura');
+            /*
+                Referência ao input de altura.
+            */
+
+            const calcularBtn = document.getElementById('calcularBtn');
+            /*
+                Referência ao botão de calcular.
+            */
+
+            const canvas = document.getElementById('medidorCanvas');
+            /*
+                Referência ao elemento canvas do medidor.
+            */
+
+            const ctx = canvas.getContext('2d');
+            /*
+                Obtém o contexto de desenho 2D do canvas.
+                O contexto é o objeto usado para desenhar formas, linhas, texto, etc.
+                '2d': tipo de contexto (existe também 'webgl' para 3D).
+            */
+
+            const resultadoTexto = document.getElementById('resultado-texto');
+            /*
+                Referência ao container do resultado textual.
+            */
+
+            const barrasContainer = document.getElementById('barrasContainer');
+            /*
+                Referência ao container do gráfico de barras.
+            */
+
+            const corpoTabela = document.getElementById('corpoTabela');
+            /*
+                Referência ao tbody da tabela de histórico.
+            */
+
+            const limparBtn = document.getElementById('limparHistoricoBtn');
+            /*
+                Referência ao botão de limpar histórico.
+            */
+
+            const themeToggle = document.getElementById('themeToggle');
+            /*
+                Referência ao botão de alternância de tema.
+            */
+
+            // ============================================================
+            // 2. GERENCIAMENTO DO HISTÓRICO (localStorage)
+            //    Chave: 'imcHistoricoPro'
+            // ============================================================
+            /*
+                Comentário de seção: funções para persistir dados no navegador.
+                localStorage: API do navegador para armazenar dados localmente.
+                Os dados persistem mesmo após fechar o navegador.
+            */
+
+            function getHistorico() {
+                /*
+                    function: palavra-chave para declarar uma função.
+                    getHistorico: nome da função.
+                    (): parâmetros (nenhum neste caso).
+                    
+                    Esta função recupera o histórico salvo no localStorage.
+                */
+
+                try {
+                    /*
+                        try-catch: estrutura para tratamento de erros.
+                        try: tenta executar o código dentro do bloco.
+                        Se ocorrer erro, o catch é executado.
+                    */
+
+                    const data = localStorage.getItem('imcHistoricoPro');
+                    /*
+                        localStorage.getItem('chave'): recupera um valor do localStorage.
+                        'imcHistoricoPro': chave usada para identificar os dados.
+                        Retorna null se a chave não existir.
+                    */
+
+                    return data ? JSON.parse(data) : [];
+                    /*
+                        Operador ternário: condição ? valorSeVerdadeiro : valorSeFalso
+                        
+                        data ?: verifica se data tem valor (não é null/undefined).
+                        JSON.parse(data): converte string JSON para objeto JavaScript.
+                        []: array vazio se não houver dados.
+                    */
+                } catch {
+                    /*
+                        catch: captura qualquer erro que ocorra no try.
+                        Sem parâmetro de erro (sintaxe ES2019+).
+                    */
+
+                    return [];
+                    /*
+                        Em caso de erro (JSON inválido, etc.), retorna array vazio.
+                    */
+                }
+            }
+
+            function saveHistorico(hist) {
+                /*
+                    Função para salvar o histórico no localStorage.
+                    hist: parâmetro que recebe o array de histórico.
+                */
+
+                localStorage.setItem('imcHistoricoPro', JSON.stringify(hist));
+                /*
+                    localStorage.setItem('chave', 'valor'): salva dados.
+                    JSON.stringify(hist): converte o array para string JSON.
+                    localStorage só armazena strings, por isso a conversão.
+                */
+            }
+
+            // ============================================================
+            // 3. DESENHO DO MEDIDOR ANALÓGICO (velocímetro)
+            //    Usa o elemento Canvas para desenhar um arco com gradiente e um ponteiro.
+            //    Parâmetro: imc (número ou null). Se null, mostra "--".
+            // ============================================================
+            /*
+                Comentário de seção: função principal de desenho do medidor.
+            */
+
+            function desenharMedidor(imc = null) {
+                /*
+                    Função para desenhar o medidor analógico.
+                    imc = null: parâmetro com valor padrão.
+                    Se nenhum valor for passado, imc será null.
+                */
+
+                const w = canvas.width, h = canvas.height;
+                /*
+                    Obtém largura (w) e altura (h) do canvas.
+                    Declaração múltipla com vírgula.
+                */
+
+                ctx.clearRect(0, 0, w, h);
+                /*
+                    clearRect(x, y, largura, altura): limpa uma área retangular.
+                    0, 0: coordenadas do canto superior esquerdo.
+                    w, h: limpa todo o canvas.
+                    Necessário para redesenhar sem "fantasmas" do desenho anterior.
+                */
+
+                const cx = w / 2, cy = h / 2, raio = 160;
+                /*
+                    cx, cy: coordenadas do centro do canvas.
+                    w / 2: metade da largura (centro X).
+                    h / 2: metade da altura (centro Y).
+                    raio: raio do arco do medidor (160 pixels).
+                */
+
+                // Ângulos de início e fim (em radianos): 135° a 405° (total de 270°)
+                /*
+                    Comentário explicando a matemática dos ângulos.
+                    Canvas usa radianos, não graus.
+                    Conversão: radianos = graus × (π / 180)
+                    
+                    O medidor desenha um arco de 270° (3/4 de círculo).
+                    Começa em 135° (parte inferior esquerda).
+                    Termina em 405° (135° + 270° = parte inferior direita).
+                */
+
+                const anguloInicio = 0.75 * Math.PI;
+                /*
+                    0.75 × π radianos = 135 graus.
+                    Math.PI: constante π (aproximadamente 3.14159).
+                */
+
+                const anguloFim = 2.25 * Math.PI;
+                /*
+                    2.25 × π radianos = 405 graus (ou -45 graus, equivalente).
+                */
+
+                // ---- Fundo do arco (cinza escuro) ----
+                /*
+                    Comentário: primeiro desenha o fundo do arco.
+                */
+
+                ctx.beginPath();
+                /*
+                    beginPath(): inicia um novo caminho de desenho.
+                    Um "caminho" é uma sequência de linhas e curvas.
+                    Sempre chame antes de iniciar um novo desenho.
+                */
+
+                ctx.arc(cx, cy, raio, anguloInicio, anguloFim);
+                /*
+                    arc(x, y, raio, anguloInicio, anguloFim): desenha um arco.
+                    cx, cy: centro do arco.
+                    raio: distância do centro até a borda.
+                    anguloInicio, anguloFim: onde começa e termina o arco.
+                */
+
+                ctx.strokeStyle = '#2d3a4f';
+                /*
+                    strokeStyle: cor da linha do traço.
+                    '#2d3a4f': cinza azulado escuro.
+                */
+
+                ctx.lineWidth = 24;
+                /*
+                    lineWidth: espessura da linha em pixels.
+                    24px cria um arco grosso, tipo velocímetro.
+                */
+
+                ctx.stroke();
+                /*
+                    stroke(): desenha o contorno do caminho definido.
+                    Usa strokeStyle e lineWidth configurados.
+                */
+
+                // ---- Arco gradiente (amarelo -> verde -> laranja -> vermelho) ----
+                /*
+                    Comentário: agora desenha o arco colorido por cima.
+                */
+
+                const grad = ctx.createLinearGradient(0, 0, w, 0);
+                /*
+                    createLinearGradient(x1, y1, x2, y2): cria um gradiente linear.
+                    0, 0: ponto inicial (canto superior esquerdo).
+                    w, 0: ponto final (canto superior direito).
+                    Gradiente vai da esquerda para a direita.
+                */
+
+                grad.addColorStop(0, '#facc15');
+                /*
+                    addColorStop(posição, cor): adiciona uma parada de cor.
+                    posição: valor de 0 (início) a 1 (fim).
+                    0: início do gradiente.
+                    '#facc15': amarelo (IMC baixo).
+                */
+
+                grad.addColorStop(0.35, '#22c55e');
+                /*
+                    0.35: 35% do gradiente.
+                    '#22c55e': verde (IMC normal).
+                */
+
+                grad.addColorStop(0.55, '#f97316');
+                /*
+                    0.55: 55% do gradiente.
+                    '#f97316': laranja (sobrepeso).
+                */
+
+                grad.addColorStop(0.75, '#ef4444');
+                /*
+                    0.75: 75% do gradiente.
+                    '#ef4444': vermelho (obesidade I).
+                */
+
+                grad.addColorStop(1, '#7f1d1d');
+                /*
+                    1: fim do gradiente.
+                    '#7f1d1d': vermelho escuro (obesidade III).
+                */
+
+                ctx.beginPath();
+                /*
+                    Inicia novo caminho para o arco colorido.
+                */
+
+                ctx.arc(cx, cy, raio, anguloInicio, anguloFim);
+                /*
+                    Mesmo arco do fundo.
+                */
+
+                ctx.strokeStyle = grad;
+                /*
+                    Define o gradiente como cor do traço.
+                    strokeStyle aceita cores, gradientes ou padrões.
+                */
+
+                ctx.lineWidth = 24;
+                /*
+                    Mesma espessura do fundo.
+                */
+
+                ctx.stroke();
+                /*
+                    Desenha o arco colorido por cima do cinza.
+                */
+
+                // ---- Se tiver IMC, desenha o ponteiro ----
+                /*
+                    Comentário: desenha o ponteiro apenas se houver IMC válido.
+                */
+
+                if (imc !== null && !isNaN(imc)) {
+                    /*
+                        Condição composta com &&:
+                        imc !== null: IMC não é nulo.
+                        !isNaN(imc): IMC não é "Not a Number".
+                        isNaN(): função que verifica se valor não é número.
+                        !: operador de negação (inverte true/false).
+                    */
+
+                    // Mapeia o IMC (faixa 10 a 50) para o ângulo (270°)
+                    /*
+                        Comentário: converte valor de IMC para posição angular.
+                    */
+
+                    const minIMC = 10, maxIMC = 50;
+                    /*
+                        Faixa do medidor: IMC de 10 a 50.
+                    */
+
+                    const imcLimitado = Math.min(maxIMC, Math.max(minIMC, imc));
+                    /*
+                        Garante que o IMC fique dentro da faixa.
+                        Math.max(minIMC, imc): retorna o maior entre minIMC e imc.
+                            Se imc < 10, retorna 10.
+                        Math.min(maxIMC, ...): retorna o menor entre maxIMC e resultado.
+                            Se imc > 50, retorna 50.
+                        Resultado: imc está sempre entre 10 e 50.
+                    */
+
+                    const frac = (imcLimitado - minIMC) / (maxIMC - minIMC);
+                    /*
+                        Calcula a fração (0 a 1) da posição do IMC na faixa.
+                        Exemplo: IMC 30 → (30-10)/(50-10) = 20/40 = 0.5 (meio do medidor).
+                    */
+
+                    const anguloPonteiro = anguloInicio + frac * (anguloFim - anguloInicio);
+                    /*
+                        Mapeia a fração para o ângulo correspondente.
+                        Se frac = 0: anguloPonteiro = anguloInicio (135°).
+                        Se frac = 1: anguloPonteiro = anguloFim (405°).
+                        Valores intermediários são interpolados linearmente.
+                    */
+
+                    // Coordenadas da ponta do ponteiro
+                    /*
+                        Comentário: cálculo de coordenadas usando trigonometria.
+                    */
+
+                    const comprimento = raio - 10;
+                    /*
+                        Comprimento do ponteiro (um pouco menor que o raio).
+                    */
+
+                    const xPonteiro = cx + comprimento * Math.cos(anguloPonteiro);
+                    /*
+                        Coordenada X da ponta do ponteiro.
+                        Fórmula: x = centroX + raio × cos(ângulo)
+                        Math.cos(): cosseno do ângulo (em radianos).
+                    */
+
+                    const yPonteiro = cy + comprimento * Math.sin(anguloPonteiro);
+                    /*
+                        Coordenada Y da ponta do ponteiro.
+                        Fórmula: y = centroY + raio × sin(ângulo)
+                        Math.sin(): seno do ângulo (em radianos).
+                    */
+
+                    // Desenha a linha do ponteiro
+                    /*
+                        Comentário: agora desenha o ponteiro.
+                    */
+
+                    ctx.beginPath();
+                    /*
+                        Inicia novo caminho.
+                    */
+
+                    ctx.moveTo(cx, cy);
+                    /*
+                        moveTo(x, y): move o "cursor" de desenho para o ponto.
+                        Não desenha nada, apenas posiciona.
+                        cx, cy: centro do canvas (base do ponteiro).
+                    */
+
+                    ctx.lineTo(xPonteiro, yPonteiro);
+                    /*
+                        lineTo(x, y): desenha uma linha até o ponto.
+                        xPonteiro, yPonteiro: ponta do ponteiro.
+                    */
+
+                    ctx.strokeStyle = '#f1f5f9';
+                    /*
+                        Cor do ponteiro: cinza claro.
+                    */
+
+                    ctx.lineWidth = 5;
+                    /*
+                        Espessura do ponteiro.
+                    */
+
+                    ctx.shadowColor = '#38bdf8';
+                    /*
+                        Cor da sombra: azul.
+                    */
+
+                    ctx.shadowBlur = 15;
+                    /*
+                        Desfoque da sombra em pixels.
+                        Cria efeito de "brilho" ao redor do ponteiro.
+                    */
+
+                    ctx.stroke();
+                    /*
+                        Desenha o ponteiro.
+                    */
+
+                    ctx.shadowBlur = 0;
+                    /*
+                        Reseta o blur da sombra para não afetar outros desenhos.
+                    */
+
+                    // Círculo central
+                    /*
+                        Comentário: desenha o pivô central do ponteiro.
+                    */
+
+                    ctx.beginPath();
+                    /*
+                        Novo caminho.
+                    */
+
+                    ctx.arc(cx, cy, 12, 0, 2 * Math.PI);
+                    /*
+                        Desenha um círculo completo.
+                        12: raio do círculo.
+                        0: ângulo inicial (0 radianos).
+                        2 * Math.PI: ângulo final (360° ou 2π radianos).
+                        Resultado: círculo completo.
+                    */
+
+                    ctx.fillStyle = '#38bdf8';
+                    /*
+                        fillStyle: cor de preenchimento (diferente de strokeStyle).
+                    */
+
+                    ctx.fill();
+                    /*
+                        fill(): preenche a forma com fillStyle.
+                    */
+
+                    ctx.strokeStyle = '#fff';
+                    /*
+                        Cor da borda: branco.
+                    */
+
+                    ctx.lineWidth = 3;
+                    /*
+                        Espessura da borda.
+                    */
+
+                    ctx.stroke();
+                    /*
+                        Desenha a borda do círculo.
+                    */
+
+                    // Valor do IMC no centro
+                    /*
+                        Comentário: exibe o valor numérico no canvas.
+                    */
+
+                    ctx.fillStyle = '#f1f5f9';
+                    /*
+                        Cor do texto: cinza claro.
+                    */
+
+                    ctx.font = 'bold 28px Inter, sans-serif';
+                    /*
+                        Define a fonte do texto.
+                        'bold': peso negrito.
+                        '28px': tamanho da fonte.
+                        'Inter, sans-serif': família da fonte.
+                    */
+
+                    ctx.textAlign = 'center';
+                    /*
+                        Alinhamento horizontal do texto.
+                        'center': centralizado no ponto de referência.
+                    */
+
+                    ctx.textBaseline = 'middle';
+                    /*
+                        Alinhamento vertical do texto.
+                        'middle': centralizado verticalmente.
+                    */
+
+                    ctx.fillText(imc.toFixed(1), cx, cy - 40);
+                    /*
+                        fillText(texto, x, y): desenha texto preenchido.
+                        imc.toFixed(1): formata IMC com 1 casa decimal.
+                        cx: coordenada X (centro).
+                        cy - 40: coordenada Y (40px acima do centro).
+                    */
+
+                    ctx.font = '14px Inter, sans-serif';
+                    /*
+                        Fonte menor para o label "IMC".
+                    */
+
+                    ctx.fillStyle = '#94a3b8';
+                    /*
+                        Cor cinza para o label.
+                    */
+
+                    ctx.fillText('IMC', cx, cy + 30);
+                    /*
+                        Desenha "IMC" 30px abaixo do centro.
+                    */
+                } else {
+                    /*
+                        else: executado se a condição do if for falsa.
+                        Aqui: quando não há IMC válido.
+                    */
+
+                    // Caso não haja IMC, mostra "--"
+                    /*
+                        Comentário: estado inicial ou sem dados.
+                    */
+
+                    ctx.fillStyle = '#94a3b8';
+                    /*
+                        Cor cinza.
+                    */
+
+                    ctx.font = 'bold 32px Inter, sans-serif';
+                    /*
+                        Fonte grande para "--".
+                    */
+
+                    ctx.textAlign = 'center';
+                    /*
+                        Texto centralizado.
+                    */
+
+                    ctx.textBaseline = 'middle';
+                    /*
+                        Alinhamento vertical ao meio.
+                    */
+
+                    ctx.fillText('--', cx, cy - 10);
+                    /*
+                        Desenha "--" (sem valor).
+                    */
+
+                    ctx.font = '14px Inter, sans-serif';
+                    /*
+                        Fonte menor para label.
+                    */
+
+                    ctx.fillText('IMC', cx, cy + 40);
+                    /*
+                        Desenha "IMC" abaixo.
+                    */
+                }
+
+                // ---- Pequenas marcas de referência (10 divisões) ----
+                /*
+                    Comentário: desenha marcas (ticks) ao redor do arco.
+                */
+
+                for (let i = 0; i <= 10; i++) {
+                    /*
+                        Loop for: repete 11 vezes (0 a 10).
+                        let: declara variável com escopo de bloco.
+                        i = 0: inicialização.
+                        i <= 10: condição de continuação.
+                        i++: incremento (i = i + 1).
+                    */
+
+                    const frac = i / 10;
+                    /*
+                        Fração da posição atual.
+                        i=0 → 0, i=5 → 0.5, i=10 → 1.
+                    */
+
+                    const ang = anguloInicio + frac * (anguloFim - anguloInicio);
+                    /*
+                        Calcula o ângulo correspondente à fração.
+                    */
+
+                    const r1 = raio - 6;
+                    /*
+                        Raio interno da marca (mais perto do centro).
+                    */
+
+                    const r2 = raio + 10;
+                    /*
+                        Raio externo da marca (mais longe do centro).
+                    */
+
+                    const x1 = cx + r1 * Math.cos(ang);
+                    /*
+                        Coordenada X do ponto interno.
+                    */
+
+                    const y1 = cy + r1 * Math.sin(ang);
+                    /*
+                        Coordenada Y do ponto interno.
+                    */
+
+                    const x2 = cx + r2 * Math.cos(ang);
+                    /*
+                        Coordenada X do ponto externo.
+                    */
+
+                    const y2 = cy + r2 * Math.sin(ang);
+                    /*
+                        Coordenada Y do ponto externo.
+                    */
+
+                    ctx.beginPath();
+                    /*
+                        Inicia novo caminho para a marca.
+                    */
+
+                    ctx.moveTo(x1, y1);
+                    /*
+                        Move para o ponto interno.
+                    */
+
+                    ctx.lineTo(x2, y2);
+                    /*
+                        Linha até o ponto externo.
+                    */
+
+                    ctx.strokeStyle = '#94a3b8';
+                    /*
+                        Cor cinza para as marcas.
+                    */
+
+                    ctx.lineWidth = 2;
+                    /*
+                        Espessura fina.
+                    */
+
+                    ctx.stroke();
+                    /*
+                        Desenha a marca.
+                    */
+                }
+            }
+
+            // ============================================================
+            // 4. ATUALIZAR RESULTADO (texto e medidor)
+            //    Recebe os parâmetros do cálculo e atualiza a interface.
+            // ============================================================
+            /*
+                Comentário de seção: função que atualiza a UI com os resultados.
+            */
+
+            function atualizarResultado(peso, altura, imc, classificacao, risco, recomendacao) {
+                /*
+                    Função com múltiplos parâmetros.
+                    peso, altura: valores inseridos.
+                    imc: resultado calculado.
+                    classificacao: categoria do IMC.
+                    risco: nível de risco à saúde.
+                    recomendacao: dica personalizada.
+                */
+
+                // Desenha o medidor com o IMC
+                /*
+                    Comentário.
+                */
+
+                desenharMedidor(imc);
+                /*
+                    Chama a função de desenho passando o IMC.
+                */
+
+                // Atualiza os elementos de texto
+                /*
+                    Comentário.
+                */
+
+                const imcNum = document.querySelector('.imc-num');
+                /*
+                    querySelector(seletor): busca o primeiro elemento que corresponde.
+                    '.imc-num': seletor CSS de classe.
+                    Similar a getElementById, mas aceita qualquer seletor CSS.
+                */
+
+                const classifSpan = document.querySelector('.classif');
+                /*
+                    Referência ao span da classificação.
+                */
+
+                const riscoSpan = document.querySelector('.risco');
+                /*
+                    Referência ao span do risco.
+                */
+
+                const recoDiv = document.querySelector('.recomendacao');
+                /*
+                    Referência ao div da recomendação.
+                */
+
+                if (imc !== null && !isNaN(imc)) {
+                    /*
+                        Se IMC é válido.
+                    */
+
+                    imcNum.textContent = imc.toFixed(2);
+                    /*
+                        textContent: define o texto do elemento.
+                        imc.toFixed(2): formata com 2 casas decimais.
+                    */
+
+                    classifSpan.textContent = classificacao;
+                    /*
+                        Exibe a classificação.
+                    */
+
+                    riscoSpan.textContent = `Risco: ${risco}`;
+                    /*
+                        Template literal (crase): permite interpolação.
+                        ${risco}: insere o valor da variável risco.
+                    */
+
+                    recoDiv.innerHTML = `<i class="fas fa-lightbulb"></i> ${recomendacao}`;
+                    /*
+                        innerHTML: define o HTML interno (não apenas texto).
+                        Permite inserir o ícone junto com o texto.
+                    */
+                } else {
+                    /*
+                        Se IMC não é válido.
+                    */
+
+                    imcNum.textContent = '--';
+                    /*
+                        Placeholder.
+                    */
+
+                    classifSpan.textContent = 'Aguardando dados';
+                    /*
+                        Mensagem padrão.
+                    */
+
+                    riscoSpan.textContent = '';
+                    /*
+                        Limpa o risco.
+                    */
+
+                    recoDiv.innerHTML = '<i class="fas fa-lightbulb"></i> Insira peso e altura';
+                    /*
+                        Instrução inicial.
+                    */
+                }
+            }
+
+            // ============================================================
+            // 5. FUNÇÃO PRINCIPAL DE CÁLCULO
+            // ============================================================
+            /*
+                Comentário de seção: lógica principal do cálculo de IMC.
+            */
+
+            function calcularIMC() {
+                /*
+                    Função que executa o cálculo e atualiza tudo.
+                */
+
+                const peso = parseFloat(pesoInput.value);
+                /*
+                    parseFloat(): converte string para número decimal.
+                    pesoInput.value: texto digitado no campo peso.
+                */
+
+                const altura = parseFloat(alturaInput.value);
+                /*
+                    Converte altura para número.
+                */
+
+                // Validação: valores positivos e numéricos
+                /*
+                    Comentário sobre validação.
+                */
+
+                if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+                    /*
+                        Condições de erro (qualquer uma verdadeira):
+                        isNaN(peso): peso não é número (campo vazio, letras, etc.).
+                        isNaN(altura): altura não é número.
+                        peso <= 0: peso é zero ou negativo.
+                        altura <= 0: altura é zero ou negativa.
+                        ||: operador OR (qualquer condição verdadeira basta).
+                    */
+
+                    // Exibe mensagem de erro no medidor (imc = null)
+                    /*
+                        Comentário.
+                    */
+
+                    desenharMedidor(null);
+                    /*
+                        Redesenha medidor sem ponteiro.
+                    */
+
+                    const imcNum = document.querySelector('.imc-num');
+                    const classifSpan = document.querySelector('.classif');
+                    const riscoSpan = document.querySelector('.risco');
+                    const recoDiv = document.querySelector('.recomendacao');
+                    /*
+                        Obtém referências aos elementos de resultado.
+                    */
+
+                    imcNum.textContent = '❌';
+                    /*
+                        Emoji de erro.
+                    */
+
+                    classifSpan.textContent = 'Valores inválidos';
+                    /*
+                        Mensagem de erro.
+                    */
+
+                    riscoSpan.textContent = '';
+                    /*
+                        Limpa risco.
+                    */
+
+                    recoDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Use números positivos';
+                    /*
+                        Instrução corretiva.
+                    */
+
+                    return;
+                    /*
+                        return: sai da função imediatamente.
+                        Não executa o código abaixo.
+                    */
+                }
+
+                // Cálculo do IMC
+                /*
+                    Comentário.
+                */
+
+                const imc = peso / (altura * altura);
+                /*
+                    Fórmula do IMC: peso (kg) dividido por altura (m) ao quadrado.
+                    altura * altura: altura elevada ao quadrado.
+                */
+
+                // Determinação da classificação, risco e recomendação
+                /*
+                    Comentário.
+                */
+
+                let classificacao, risco, recomendacao;
+                /*
+                    let: declara variáveis que serão atribuídas depois.
+                    Diferente de const, let permite reatribuição.
+                */
+
+                if (imc < 18.5) {
+                    /*
+                        IMC abaixo de 18.5: baixo peso.
+                    */
+
+                    classificacao = 'Abaixo do peso';
+                    /*
+                        Atribui a classificação.
+                    */
+
+                    risco = 'Baixo';
+                    /*
+                        Risco à saúde.
+                    */
+
+                    recomendacao = `Ganhe ${(18.5 * (altura ** 2) - peso).toFixed(1)} kg para atingir o normal. Consulte um nutricionista.`;
+                    /*
+                        Template literal com cálculo:
+                        altura ** 2: operador de exponenciação (altura ao quadrado).
+                        18.5 * (altura ** 2): peso mínimo para IMC 18.5.
+                        - peso: diferença em relação ao peso atual.
+                        .toFixed(1): formata com 1 casa decimal.
+                    */
+                } else if (imc < 25) {
+                    /*
+                        else if: condição alternativa.
+                        IMC entre 18.5 e 24.99: peso normal.
+                    */
+
+                    classificacao = 'Peso normal';
+                    risco = 'Mínimo';
+                    recomendacao = 'Parabéns! Mantenha hábitos saudáveis.';
+                } else if (imc < 30) {
+                    /*
+                        IMC entre 25 e 29.99: sobrepeso.
+                    */
+
+                    classificacao = 'Sobrepeso';
+                    risco = 'Elevado';
+                    recomendacao = `Perda sugerida: ${(peso - 24.9 * (altura ** 2)).toFixed(1)} kg. Atividade física e reeducação alimentar.`;
+                    /*
+                        Cálculo inverso: peso atual menos peso máximo para IMC 24.9.
+                    */
+                } else if (imc < 35) {
+                    /*
+                        IMC entre 30 e 34.99: obesidade grau I.
+                    */
+
+                    classificacao = 'Obesidade grau I';
+                    risco = 'Médio';
+                    recomendacao = `Procure orientação. Perder ${(peso - 24.9 * (altura ** 2)).toFixed(1)} kg já ajuda. Consulte médico.`;
+                } else if (imc < 40) {
+                    /*
+                        IMC entre 35 e 39.99: obesidade grau II.
+                    */
+
+                    classificacao = 'Obesidade grau II (severa)';
+                    risco = 'Alto';
+                    recomendacao = 'Busque acompanhamento médico urgente.';
+                } else {
+                    /*
+                        else: captura todos os outros casos.
+                        IMC >= 40: obesidade grau III.
+                    */
+
+                    classificacao = 'Obesidade grau III (mórbida)';
+                    risco = 'Muito alto';
+                    recomendacao = 'Procure um especialista imediatamente.';
+                }
+
+                // Atualiza a interface com o resultado
+                /*
+                    Comentário.
+                */
+
+                atualizarResultado(peso, altura, imc, classificacao, risco, recomendacao);
+                /*
+                    Chama a função que atualiza medidor e textos.
+                */
+
+                // ===== SALVA NO HISTÓRICO =====
+                /*
+                    Comentário.
+                */
+
+                const historico = getHistorico();
+                /*
+                    Recupera o histórico atual.
+                */
+
+                historico.push({
+                    /*
+                        push(): adiciona elemento ao final do array.
+                        {}: objeto literal com os dados do registro.
+                    */
+
+                    data: new Date().toLocaleString(),
+                    /*
+                        new Date(): cria objeto com data/hora atual.
+                        toLocaleString(): formata para string legível local.
+                    */
+
+                    peso: peso,
+                    /*
+                        Armazena o peso.
+                        Sintaxe abreviada: se chave = variável, pode usar só peso.
+                    */
+
+                    altura: altura,
+                    /*
+                        Armazena a altura.
+                    */
+
+                    imc: parseFloat(imc.toFixed(2)),
+                    /*
+                        Armazena IMC com 2 casas decimais.
+                        parseFloat converte de volta para número.
+                    */
+
+                    classificacao: classificacao,
+                    /*
+                        Armazena a classificação.
+                    */
+
+                    risco: risco
+                    /*
+                        Armazena o risco.
+                    */
+                });
+
+                // Limita a 50 registros para não sobrecarregar o localStorage
+                /*
+                    Comentário.
+                */
+
+                if (historico.length > 50) historico.shift();
+                /*
+                    Condição sem chaves (sintaxe curta para uma linha).
+                    historico.length: quantidade de elementos no array.
+                    shift(): remove o primeiro elemento do array (mais antigo).
+                */
+
+                saveHistorico(historico);
+                /*
+                    Salva o histórico atualizado.
+                */
+
+                // Renderiza novamente o histórico (barras e tabela)
+                /*
+                    Comentário.
+                */
+
+                renderizarHistorico();
+                /*
+                    Atualiza a exibição do histórico.
+                */
+            }
+
+            // ============================================================
+            // 6. RENDERIZAÇÃO DO HISTÓRICO (barras + tabela)
+            // ============================================================
+            /*
+                Comentário de seção: função que exibe o histórico visual.
+            */
+
+            function renderizarHistorico() {
+                /*
+                    Função que gera barras e tabela do histórico.
+                */
+
+                const historico = getHistorico();
+                /*
+                    Obtém dados salvos.
+                */
+
+                // ---- GRÁFICO DE BARRAS ----
+                /*
+                    Comentário.
+                */
+
+                barrasContainer.innerHTML = '';
+                /*
+                    Limpa o container (remove barras antigas).
+                */
+
+                if (historico.length === 0) {
+                    /*
+                        Se não há histórico.
+                    */
+
+                    barrasContainer.innerHTML = '<div class="historico-vazio">Nenhum registro ainda</div>';
+                    /*
+                        Exibe mensagem.
+                    */
+                } else {
+                    /*
+                        Se há histórico.
+                    */
+
+                    // Pega os últimos 15 registros
+                    /*
+                        Comentário.
+                    */
+
+                    const ultimos = historico.slice(-15);
+                    /*
+                        slice(inicio, fim): extrai parte do array.
+                        -15: últimos 15 elementos.
+                        Número negativo conta do final.
+                    */
+
+                    const maxIMC = Math.max(...ultimos.map(r => r.imc), 30);
+                    /*
+                        Encontra o maior IMC para escalar as barras.
+                        
+                        ultimos.map(r => r.imc):
+                            map(): transforma array, aplicando função a cada elemento.
+                            r => r.imc: arrow function que extrai o IMC de cada registro.
+                            Resultado: array com apenas os valores de IMC.
+                        
+                        ...ultimos.map(...): spread operator.
+                            "Espalha" o array como argumentos individuais.
+                        
+                        Math.max(...array, 30):
+                            Retorna o maior valor entre todos IMCs e 30.
+                            30 é o mínimo para escala (evita barras muito altas com IMCs baixos).
+                    */
+
+                    const alturaMax = 100;
+                    /*
+                        Altura máxima das barras em pixels.
+                    */
+
+                    ultimos.forEach((reg) => {
+                        /*
+                            forEach(): executa função para cada elemento do array.
+                            reg: parâmetro representando cada registro.
+                            Arrow function: (parâmetro) => { código }
+                        */
+
+                        const div = document.createElement('div');
+                        /*
+                            createElement('tag'): cria um novo elemento HTML.
+                            'div': tipo do elemento.
+                            O elemento existe apenas em memória até ser adicionado ao DOM.
+                        */
+
+                        div.className = 'barra-item';
+                        /*
+                            className: define a classe CSS do elemento.
+                        */
+
+                        const barra = document.createElement('div');
+                        /*
+                            Cria a barra propriamente dita.
+                        */
+
+                        barra.className = 'barra';
+                        /*
+                            Classe da barra.
+                        */
+
+                        const alturaBarra = (reg.imc / maxIMC) * alturaMax;
+                        /*
+                            Calcula altura proporcional.
+                            reg.imc / maxIMC: proporção do IMC em relação ao máximo.
+                            * alturaMax: converte para pixels.
+                        */
+
+                        barra.style.height = Math.max(4, alturaBarra) + 'px';
+                        /*
+                            style.height: define altura via CSS inline.
+                            Math.max(4, alturaBarra): garante mínimo de 4px.
+                            + 'px': concatena unidade.
+                        */
+
+                        // Cor baseada no IMC
+                        /*
+                            Comentário.
+                        */
+
+                        let cor;
+                        /*
+                            Variável para armazenar a cor.
+                        */
+
+                        if (reg.imc < 18.5) cor = '#facc15';
+                        /*
+                            Baixo peso: amarelo.
+                        */
+
+                        else if (reg.imc < 25) cor = '#22c55e';
+                        /*
+                            Normal: verde.
+                        */
+
+                        else if (reg.imc < 30) cor = '#f97316';
+                        /*
+                            Sobrepeso: laranja.
+                        */
+
+                        else cor = '#ef4444';
+                        /*
+                            Obesidade: vermelho.
+                        */
+
+                        barra.style.background = cor;
+                        /*
+                            Define a cor de fundo da barra.
+                        */
+
+                        const label = document.createElement('span');
+                        /*
+                            Cria o label com valor do IMC.
+                        */
+
+                        label.className = 'label';
+                        /*
+                            Classe do label.
+                        */
+
+                        label.textContent = reg.imc.toFixed(1);
+                        /*
+                            Define o texto (IMC com 1 decimal).
+                        */
+
+                        div.appendChild(barra);
+                        /*
+                            appendChild(): adiciona elemento filho.
+                            Adiciona a barra dentro do div.barra-item.
+                        */
+
+                        div.appendChild(label);
+                        /*
+                            Adiciona o label abaixo da barra.
+                        */
+
+                        barrasContainer.appendChild(div);
+                        /*
+                            Adiciona o item completo ao container.
+                        */
+                    });
+                }
+
+                // ---- TABELA DE HISTÓRICO ----
+                /*
+                    Comentário.
+                */
+
+                const tbody = corpoTabela;
+                /*
+                    Referência ao tbody da tabela.
+                */
+
+                tbody.innerHTML = '';
+                /*
+                    Limpa conteúdo anterior.
+                */
+
+                if (historico.length === 0) {
+                    /*
+                        Se não há histórico.
+                    */
+
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-secondary);">Nenhum registro</td></tr>';
+                    /*
+                        Linha única com mensagem.
+                    */
+                } else {
+                    /*
+                        Se há histórico.
+                    */
+
+                    // Mostra os últimos 10 (do mais recente para o mais antigo)
+                    /*
+                        Comentário.
+                    */
+
+                    const recentes = historico.slice(-10).reverse();
+                    /*
+                        slice(-10): últimos 10 registros.
+                        reverse(): inverte a ordem (mais recente primeiro).
+                        reverse() modifica o array, mas slice() já criou uma cópia.
+                    */
+
+                    recentes.forEach((reg, idx) => {
+                        /*
+                            forEach com dois parâmetros:
+                            reg: o elemento atual.
+                            idx: índice (posição) atual.
+                        */
+
+                        const tr = document.createElement('tr');
+                        /*
+                            Cria uma linha de tabela.
+                        */
+
+                        tr.innerHTML = `
+                            <td>${idx + 1}</td>
+                            <td>${reg.data}</td>
+                            <td>${reg.peso.toFixed(1)}</td>
+                            <td>${reg.altura.toFixed(2)}</td>
+                            <td>${reg.imc.toFixed(2)}</td>
+                            <td>${reg.classificacao}</td>
+                        `;
+                        /*
+                            Template literal multilinha.
+                            Define o HTML interno da linha com células.
+                            ${idx + 1}: número da linha (1-based).
+                            ${reg.data}: data do registro.
+                            ${reg.peso.toFixed(1)}: peso formatado.
+                            ${reg.altura.toFixed(2)}: altura formatada.
+                            ${reg.imc.toFixed(2)}: IMC formatado.
+                            ${reg.classificacao}: classificação.
+                        */
+
+                        tbody.appendChild(tr);
+                        /*
+                            Adiciona a linha ao corpo da tabela.
+                        */
+                    });
+                }
+            }
+
+            // ============================================================
+            // 7. LIMPAR HISTÓRICO
+            // ============================================================
+            /*
+                Comentário de seção.
+            */
+
+            function limparHistorico() {
+                /*
+                    Função para apagar todo o histórico.
+                */
+
+                if (confirm('Apagar todo o histórico?')) {
+                    /*
+                        confirm(): exibe caixa de diálogo com OK/Cancelar.
+                        Retorna true se usuário clicou OK.
+                    */
+
+                    saveHistorico([]);
+                    /*
+                        Salva array vazio (apaga tudo).
+                    */
+
+                    renderizarHistorico();
+                    /*
+                        Atualiza a exibição.
+                    */
+
+                    // Reseta o medidor e o texto
+                    /*
+                        Comentário.
+                    */
+
+                    desenharMedidor(null);
+                    /*
+                        Medidor sem ponteiro.
+                    */
+
+                    const imcNum = document.querySelector('.imc-num');
+                    const classifSpan = document.querySelector('.classif');
+                    const riscoSpan = document.querySelector('.risco');
+                    const recoDiv = document.querySelector('.recomendacao');
+                    /*
+                        Referências aos elementos.
+                    */
+
+                    imcNum.textContent = '--';
+                    /*
+                        Reseta valor.
+                    */
+
+                    classifSpan.textContent = 'Histórico limpo';
+                    /*
+                        Mensagem de confirmação.
+                    */
+
+                    riscoSpan.textContent = '';
+                    /*
+                        Limpa risco.
+                    */
+
+                    recoDiv.innerHTML = '<i class="fas fa-undo"></i> Recalcule para ver resultados';
+                    /*
+                        Instrução.
+                    */
+                }
+            }
+
+            // ============================================================
+            // 8. TEMA CLARO/ESCURO (alternância via CSS custom properties)
+            // ============================================================
+            /*
+                Comentário de seção.
+            */
+
+            function toggleTheme() {
+                /*
+                    Função que alterna entre tema claro e escuro.
+                */
+
+                const root = document.documentElement;
+                /*
+                    documentElement: referência ao elemento <html>.
+                    É onde as variáveis CSS foram definidas (:root).
+                */
+
+                const atual = getComputedStyle(root).getPropertyValue('--bg').trim();
+                /*
+                    getComputedStyle(elemento): obtém estilos computados.
+                    getPropertyValue('--bg'): obtém valor da variável CSS.
+                    trim(): remove espaços em branco das pontas.
+                */
+
+                if (atual === '#0b1120') {
+                    /*
+                        Se cor de fundo é a do tema escuro.
+                    */
+
+                    // Tema claro
+                    /*
+                        Comentário.
+                    */
+
+                    root.style.setProperty('--bg', '#f1f5f9');
+                    /*
+                        style.setProperty('variável', 'valor'): altera variável CSS.
+                        Muda fundo para cinza claro.
+                    */
+
+                    root.style.setProperty('--card-bg', '#ffffff');
+                    /*
+                        Cards brancos.
+                    */
+
+                    root.style.setProperty('--text', '#0b1120');
+                    /*
+                        Texto escuro.
+                    */
+
+                    root.style.setProperty('--text-secondary', '#475569');
+                    /*
+                        Texto secundário mais escuro.
+                    */
+
+                    root.style.setProperty('--border', '#cbd5e1');
+                    /*
+                        Bordas mais claras.
+                    */
+
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Claro';
+                    /*
+                        Muda ícone para sol e texto para "Claro".
+                    */
+                } else {
+                    /*
+                        Senão, está no tema claro.
+                    */
+
+                    // Tema escuro
+                    /*
+                        Comentário.
+                    */
+
+                    root.style.setProperty('--bg', '#0b1120');
+                    /*
+                        Restaura fundo escuro.
+                    */
+
+                    root.style.setProperty('--card-bg', '#1a2332');
+                    /*
+                        Cards escuros.
+                    */
+
+                    root.style.setProperty('--text', '#f1f5f9');
+                    /*
+                        Texto claro.
+                    */
+
+                    root.style.setProperty('--text-secondary', '#94a3b8');
+                    /*
+                        Texto secundário.
+                    */
+
+                    root.style.setProperty('--border', '#2d3a4f');
+                    /*
+                        Bordas escuras.
+                    */
+
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i> Tema';
+                    /*
+                        Muda ícone para lua e texto para "Tema".
+                    */
+                }
+            }
+
+            // ============================================================
+            // 9. INICIALIZAÇÃO E EVENTOS
+            // ============================================================
+            /*
+                Comentário de seção.
+            */
+
+            function init() {
+                /*
+                    Função de inicialização.
+                    Configura o estado inicial da aplicação.
+                */
+
+                desenharMedidor(null);
+                /*
+                    Desenha medidor inicial sem valor.
+                */
+
+                renderizarHistorico();
+                /*
+                    Renderiza histórico existente (do localStorage).
+                */
+
+                calcularBtn.addEventListener('click', calcularIMC);
+                /*
+                    addEventListener('evento', função): registra um ouvinte de evento.
+                    'click': tipo de evento (clique do mouse).
+                    calcularIMC: função a ser chamada quando o evento ocorrer.
+                    Quando o botão for clicado, calcularIMC() é executada.
+                */
+
+                pesoInput.addEventListener('keypress', (e) => {
+                    /*
+                        Ouvinte de evento 'keypress': quando tecla é pressionada.
+                        (e) => {...}: arrow function com parâmetro e (evento).
+                        O objeto evento contém informações sobre a tecla pressionada.
+                    */
+
+                    if (e.key === 'Enter') calcularIMC();
+                    /*
+                        e.key: a tecla pressionada.
+                        'Enter': tecla Enter.
+                        Se Enter for pressionado, calcula o IMC.
+                    */
+                });
+
+                alturaInput.addEventListener('keypress', (e) => {
+                    /*
+                        Mesmo comportamento para o input de altura.
+                    */
+
+                    if (e.key === 'Enter') calcularIMC();
+                    /*
+                        Enter no campo altura também calcula.
+                    */
+                });
+
+                limparBtn.addEventListener('click', limparHistorico);
+                /*
+                    Clique no botão limpar chama limparHistorico().
+                */
+
+                themeToggle.addEventListener('click', toggleTheme);
+                /*
+                    Clique no botão de tema chama toggleTheme().
+                */
+            }
+
+            init();
+            /*
+                Chama a função de inicialização.
+                Executa quando o script é carregado.
+            */
+
+        })();
+        /*
+            })(): fim da IIFE (Immediately Invoked Function Expression).
+            Os parênteses finais () executam a função imediatamente.
+        */
+
+        // Fim da IIFE
+        /*
+            Comentário indicando o fim do script.
+        */
+    </script>
+    <!-- 
+        Fim da tag </script>: encerra o bloco JavaScript.
+    -->
+
+</body>
+<!-- 
+    Fim da tag </body>: encerra o conteúdo visível.
+-->
+
+</html>
+<!-- 
+    Fim da tag </html>: encerra o documento HTML.
+-->
